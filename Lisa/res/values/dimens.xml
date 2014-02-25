@@ -1,0 +1,16 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="activity_write_button">200px</dimen>
+    <dimen name="activity_write_button_big">350px</dimen>
+    <dimen name="activity_write_button_small">200px</dimen>
+    <dimen name="activity_write_button_big_small">350px</dimen>
+    <dimen name="activity_write_button_large">200px</dimen>
+    <dimen name="activity_write_button_big_large">350px</dimen>
+    <dimen name="activity_write_button_xlarge">500px</dimen>
+    <dimen name="activity_write_button_big_xlarge">750px</dimen>
+    <dimen name="activity_write_textsize">100px</dimen>
+
+</resources>

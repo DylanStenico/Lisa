@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="apk" name="BTA">
+    <output-path>$PROJECT_DIR$/out/artifacts/BTA</output-path>
+    <properties id="android-properties">
+      <options>
+        <option name="keyStoreUrl" value="file://" />
+      </options>
+    </properties>
+    <root id="archive" name="BTA.apk">
+      <element id="android-final-package" facet="BTA/android/Android" />
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item android:id="@+id/maze_clear_log"
+          android:title="Clear Log"
+          android:showAsAction="ifRoom|withText"/>
+
+    <item android:id="@+id/change_floor"
+          android:title="Show Floor 2"
+          android:showAsAction="ifRoom|withText"
+          android:actionViewClass="android.widget.Button"/>
+
+</menu>

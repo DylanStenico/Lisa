@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Giraffa</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_act__read">Act_Read</string>
+    <string name="main_connect">Connect</string>
+    <string name="main_disconnect">Disconnect</string>
+    <string name="main_state_default">Connect to paired device</string>
+    <string name="main_state_BT_not_available">Bluetooth not available</string>
+    <string name="main_state_connecting">Connecting to</string>
+    <string name="main_state_connected">Connected to</string>
+    <string name="main_state_error_connection">Error connecting to</string>
+    <string name="main_read_activity">Talk</string>
+    <string name="main_write_activity">Pilot</string>
+    <string name="main_maze_activity">Maze</string>
+    <string name="main_temperature_activity">Temperature</string>
+    <string name="main_lisa_activity">Lisa</string>
+    <string name="title_activity_select_device">Select Device</string>
+    <string name="sd_text_view">Select a paired device:</string>
+    <string name="title_activity_read">Read</string>
+    <string name="title_activity_write">Write</string>
+    <string name="title_activity_maze">Maze</string>
+    <string name="title_activity_temperature">Temperature</string>
+    <string name="title_activity_lisa">Lisa</string>
+    <string name="ra_tosend_hing">Text to send</string>
+    <string name="ra_cmd_send">Send</string>
+    <string name="ra_cmd_clear">Clear Log</string>
+
+</resources>

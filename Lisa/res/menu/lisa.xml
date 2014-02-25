@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item android:id="@+id/follow_robot"
+          android:title="Follow"
+          android:showAsAction="ifRoom|withText"
+          android:actionViewClass="android.widget.Switch"/>
+
+    <item android:id="@+id/change_floor"
+          android:title="Change Floor"
+          android:showAsAction="collapseActionView"/>
+
+    <item android:id="@+id/refresh"
+        android:title="Refresh"
+        android:showAsAction="collapseActionView"/>
+
+</menu>
