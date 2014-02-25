@@ -4,7 +4,6 @@ import robocup2014.lisa.connection.ConnectedThread;
 import robocup2014.lisa.connection.Globals;
 import robocup2014.lisa.datatype.Robot;
 import robocup2014.lisa.datatype.Tile;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -23,7 +22,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;

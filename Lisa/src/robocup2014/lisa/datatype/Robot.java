@@ -164,48 +164,32 @@ public class Robot {
 //																			 currentTile.isOpen(Tile.Direction.AHEAD) +
 //																			 currentTile.isOpen(Tile.Direction.RIGHT) +
 //																			 currentTile.isOpen(Tile.Direction.BACK));
-			if (currentTile.isOpen(Tile.Direction.AHEAD)
-					&& maze[currentTile.getPoint().x][currentTile.getPoint().y + 1]
-							.getPriority() > priority) {
-				if (maze[currentTile.getPoint().x][currentTile.getPoint().y + 1]
-						.getFloor() != Floor.BLACK_FLOOR) {
-					maze[currentTile.getPoint().x][currentTile.getPoint().y + 1]
-							.setPriority(priority);
-					queue.add(maze[currentTile.getPoint().x][currentTile
-					                                         .getPoint().y + 1]);
+			if (currentTile.isOpen(Tile.Direction.AHEAD) && maze[currentTile.getPoint().x][currentTile.getPoint().y + 1].getPriority() > priority) {
+				if (maze[currentTile.getPoint().x][currentTile.getPoint().y + 1].getFloor() != Floor.BLACK_FLOOR && 
+					!maze[currentTile.getPoint().x][currentTile.getPoint().y + 1].isVisited()) {
+					maze[currentTile.getPoint().x][currentTile.getPoint().y + 1].setPriority(priority);
+					queue.add(maze[currentTile.getPoint().x][currentTile.getPoint().y + 1]);
 				}
 			}
-			if (currentTile.isOpen(Tile.Direction.LEFT)
-					&& maze[currentTile.getPoint().x - 1][currentTile
-					                                      .getPoint().y].getPriority() > priority) {
-				if (maze[currentTile.getPoint().x - 1][currentTile.getPoint().y]
-						.getFloor() != Floor.BLACK_FLOOR) {
-					maze[currentTile.getPoint().x - 1][currentTile.getPoint().y]
-							.setPriority(priority);
-					queue.add(maze[currentTile.getPoint().x - 1][currentTile
-					                                             .getPoint().y]);
+			if (currentTile.isOpen(Tile.Direction.LEFT)&& maze[currentTile.getPoint().x - 1][currentTile.getPoint().y].getPriority() > priority) {
+				if (maze[currentTile.getPoint().x - 1][currentTile.getPoint().y].getFloor() != Floor.BLACK_FLOOR && 
+						!maze[currentTile.getPoint().x - 1][currentTile.getPoint().y].isVisited()) {
+					maze[currentTile.getPoint().x - 1][currentTile.getPoint().y].setPriority(priority);
+					queue.add(maze[currentTile.getPoint().x - 1][currentTile.getPoint().y]);
 				}
 			}
-			if (currentTile.isOpen(Tile.Direction.RIGHT)
-					&& maze[currentTile.getPoint().x + 1][currentTile
-					                                      .getPoint().y].getPriority() > priority) {
-				if (maze[currentTile.getPoint().x + 1][currentTile.getPoint().y]
-						.getFloor() != Floor.BLACK_FLOOR) {
-					maze[currentTile.getPoint().x + 1][currentTile.getPoint().y]
-							.setPriority(priority);
-					queue.add(maze[currentTile.getPoint().x + 1][currentTile
-					                                             .getPoint().y]);
+			if (currentTile.isOpen(Tile.Direction.RIGHT)&& maze[currentTile.getPoint().x + 1][currentTile.getPoint().y].getPriority() > priority) {
+				if (maze[currentTile.getPoint().x + 1][currentTile.getPoint().y].getFloor() != Floor.BLACK_FLOOR && 
+						!maze[currentTile.getPoint().x + 1][currentTile.getPoint().y].isVisited()) {
+					maze[currentTile.getPoint().x + 1][currentTile.getPoint().y].setPriority(priority);
+					queue.add(maze[currentTile.getPoint().x + 1][currentTile.getPoint().y]);
 				}
 			}
-			if (currentTile.isOpen(Tile.Direction.BACK)
-					&& maze[currentTile.getPoint().x][currentTile.getPoint().y - 1]
-							.getPriority() > priority) {
-				if (maze[currentTile.getPoint().x][currentTile.getPoint().y - 1]
-						.getFloor() != Floor.BLACK_FLOOR) {
-					maze[currentTile.getPoint().x][currentTile.getPoint().y - 1]
-							.setPriority(priority);
-					queue.add(maze[currentTile.getPoint().x][currentTile
-					                                         .getPoint().y - 1]);
+			if (currentTile.isOpen(Tile.Direction.BACK)&& maze[currentTile.getPoint().x][currentTile.getPoint().y - 1].getPriority() > priority) {
+				if (maze[currentTile.getPoint().x][currentTile.getPoint().y - 1].getFloor() != Floor.BLACK_FLOOR && 
+						!maze[currentTile.getPoint().x][currentTile.getPoint().y - 1].isVisited()) {
+					maze[currentTile.getPoint().x][currentTile.getPoint().y - 1].setPriority(priority);
+					queue.add(maze[currentTile.getPoint().x][currentTile.getPoint().y - 1]);
 				}
 			}
 		}

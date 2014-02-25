@@ -15,14 +15,14 @@ public class PathComparator implements Comparator<Tile> {
 
 		else if(arg0.getPriority() > arg1.getPriority())
 			return 1;
-		else{
-			if(arg0.isVisited() && !arg1.isVisited()){
-				return -1;
-			}
-			else if(!arg0.isVisited() && arg1.isVisited()){
-				return 1;
-			}
-		}
+//		else{
+//			if(arg0.isVisited() && !arg1.isVisited()){
+//				return -1;
+//			}
+//			else if(!arg0.isVisited() && arg1.isVisited()){
+//				return 1;
+//			}
+//		}
 		return 0;
 	}
 }
