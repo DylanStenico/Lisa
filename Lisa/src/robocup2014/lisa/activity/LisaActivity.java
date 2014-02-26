@@ -35,14 +35,14 @@ public class LisaActivity extends Activity {
 	private ConnectedThread ct;	
 	private String lastData = "";
 	boolean dataReady = false;
-	private Robot lisa = new Robot();
-	private int x_field_dim = 20,
-			y_field_dim = 20;
-	private int cell_dim = 0,
-			x_margin = 0,
-			y_margin = 0,
-			strokeWidth = 3;
-	private int robot_z = 0;
+	private Robot lisa;
+	private int xFieldDim,
+		    yFieldDim;
+	private int cellDim = 0,
+		    xMargin = 0,
+		    yMargin = 0,
+		    strokeWidth = 3;
+	private int zRobot = 0;
 	private DrawView mazeView;
 	private Display mDisplay;
 	private Point displaySize = new Point();
@@ -59,7 +59,7 @@ public class LisaActivity extends Activity {
 		mazeView.setOnTouchListener(mazeViewTouchListener);
 		// Show the Up button in the action bar.
 		setupActionBar();
-
+		lisa = new Robot();
 		ct = Globals.getConnectedThread();
 		ct.setHandler(myHandler);
 		if (ct.getState() == Thread.State.NEW) {
@@ -355,31 +355,31 @@ public class LisaActivity extends Activity {
 			}
 
 			if(showFirstFloor) {
-				x_field_dim = lisa.MAX_GROUND;
-				y_field_dim = lisa.MAX_GROUND;
+				xFieldDim = lisa.MAX_GROUND;
+				yFieldDim = lisa.MAX_GROUND;
 				Toast.makeText(getApplicationContext(), "Ground Level", Toast.LENGTH_SHORT).show();
 			}
 			else {
-				x_field_dim = lisa.MAX_AIR;
-				y_field_dim = lisa.MAX_AIR;
+				xFieldDim = lisa.MAX_AIR;
+				yFieldDim = lisa.MAX_AIR;
 				Toast.makeText(getApplicationContext(), "Air Level", Toast.LENGTH_SHORT).show();
 			}
 
 			if (horizontal) {
-				cell_dim = (displaySize.y - 4) / (y_field_dim);
-				x_margin = (displaySize.x - (cell_dim * x_field_dim)) / 2;
-				y_margin = (displaySize.y - (cell_dim * y_field_dim)) / 2;
+				cellDim = (displaySize.y - 4) / (yFieldDim);
+				xMargin = (displaySize.x - (cellDim * xFieldDim)) / 2;
+				yMargin = (displaySize.y - (cellDim * yFieldDim)) / 2;
 			} else {
-				cell_dim = (displaySize.x - 4) / (x_field_dim);
-				x_margin = (displaySize.x - (cell_dim * x_field_dim)) / 2;
-				y_margin = (displaySize.y - (cell_dim * y_field_dim)) / 2;
+				cellDim = (displaySize.x - 4) / (xFieldDim);
+				xMargin = (displaySize.x - (cellDim * xFieldDim)) / 2;
+				yMargin = (displaySize.y - (cellDim * yFieldDim)) / 2;
 			}
 
 			//Log.d("Drawing", x_field_dim+":"+y_field_dim+":"+x_margin+":"+y_margin+":"
 			//		+cell_dim+":"+displaySize.x+":"+displaySize.y);
 
 
-			strokeWidth = cell_dim / 8;
+			strokeWidth = cellDim / 8;
 
 			strokeWidth = limitValue(3, strokeWidth, 10);
 
@@ -423,8 +423,8 @@ public class LisaActivity extends Activity {
 			//Log.d("Displacement", d.toString());
 			mazeCenter.x -= (d.x * 2) / scale;
 			mazeCenter.y -= (d.y * 2) / scale;
-			mazeCenter.x = limitValue(x_margin, mazeCenter.x, getWidth() - x_margin);
-			mazeCenter.y = limitValue(y_margin, mazeCenter.y, getHeight() - y_margin);
+			mazeCenter.x = limitValue(xMargin, mazeCenter.x, getWidth() - xMargin);
+			mazeCenter.y = limitValue(yMargin, mazeCenter.y, getHeight() - yMargin);
 		}
 
 		public int limitValue(int minBound, int value, int maxBound) {
@@ -454,9 +454,9 @@ public class LisaActivity extends Activity {
 		public void DrawField(Canvas canvas) {
 
 
-			int rob_radius = cell_dim / 2,
-					rob_x = (lisa.getPosition().x * cell_dim) + x_margin + rob_radius,
-					rob_y = (lisa.getPosition().y * cell_dim) + y_margin + rob_radius;
+			int rob_radius = cellDim / 2,
+					rob_x = (lisa.getPosition().x * cellDim) + xMargin + rob_radius,
+					rob_y = (lisa.getPosition().y * cellDim) + yMargin + rob_radius;
 
 			if(followRobot) {
 				mazeCenter.x = getWidth() - rob_x;
@@ -472,8 +472,8 @@ public class LisaActivity extends Activity {
 
 			//Log.d("Scaling", scale + ":" + mazeCenter.x + ":" + mazeCenter.y);
 
-			for (int x = 0; x < x_field_dim; x++) {
-				for (int y = 0; y < y_field_dim; y++) {
+			for (int x = 0; x < xFieldDim; x++) {
+				for (int y = 0; y < yFieldDim; y++) {
 					Tile tile = maze[x][y];
 
 					rect_paint.setColor(Color.WHITE);
@@ -488,24 +488,24 @@ public class LisaActivity extends Activity {
 						rect_paint.setColor(Color.GREEN);
 					}
 
-					int start_rx = (x * cell_dim) + x_margin, start_ry = (y * cell_dim)
-							+ y_margin, stop_rx = start_rx + cell_dim, stop_ry = start_ry
-							+ cell_dim;
+					int start_rx = (x * cellDim) + xMargin, start_ry = (y * cellDim)
+							+ yMargin, stop_rx = start_rx + cellDim, stop_ry = start_ry
+							+ cellDim;
 
 					// Toast.makeText(getApplicationContext(),start_rx+":"+start_ry,Toast.LENGTH_LONG).show();
 					canvas.drawRect(start_rx, invert(stop_ry), stop_rx,
 							invert(start_ry), rect_paint);
 
 					if (tile.getObstacle()) {
-						int start_x = (x * cell_dim) + x_margin, start_y = (y * cell_dim)
-								+ y_margin, stop_x = start_x + cell_dim, stop_y = start_y
-								+ cell_dim;
+						int start_x = (x * cellDim) + xMargin, start_y = (y * cellDim)
+								+ yMargin, stop_x = start_x + cellDim, stop_y = start_y
+								+ cellDim;
 
 						canvas.drawLine(start_x, invert(start_y), stop_x,
 								invert(stop_y), obstacle_paint);
 
-						start_y = (y * cell_dim) + y_margin + cell_dim;
-						stop_y = start_y - cell_dim;
+						start_y = (y * cellDim) + yMargin + cellDim;
+						stop_y = start_y - cellDim;
 
 						canvas.drawLine(start_x, invert(start_y), stop_x,
 								invert(stop_y), obstacle_paint);
@@ -513,71 +513,71 @@ public class LisaActivity extends Activity {
 				}
 			}
 
-			for (int x = 0; x < x_field_dim; x++) {
-				for (int y = 0; y < y_field_dim; y++) {
+			for (int x = 0; x < xFieldDim; x++) {
+				for (int y = 0; y < yFieldDim; y++) {
 					Tile tile = maze[x][y];
 
 					if (tile.getWall(Tile.Direction.BACK)) {
-						int start_x = (x * cell_dim) + x_margin, start_y = (y * cell_dim)
-								+ y_margin, stop_x = start_x + cell_dim, stop_y = start_y;
+						int start_x = (x * cellDim) + xMargin, start_y = (y * cellDim)
+								+ yMargin, stop_x = start_x + cellDim, stop_y = start_y;
 
 						canvas.drawLine(start_x, invert(start_y), stop_x,
 								invert(stop_y), wall_paint);
 					}
 
 					if (tile.getWall(Tile.Direction.LEFT)) {
-						int start_x = (x * cell_dim) + x_margin,
-								start_y = (y * cell_dim) + y_margin,
+						int start_x = (x * cellDim) + xMargin,
+								start_y = (y * cellDim) + yMargin,
 								stop_x = start_x,
-								stop_y = start_y + cell_dim;
+								stop_y = start_y + cellDim;
 
 						canvas.drawLine(start_x, invert(start_y), stop_x,
 								invert(stop_y), wall_paint);
 					}
 
 					if (tile.getWall(Tile.Direction.RIGHT)) {
-						int start_x = (x * cell_dim) + x_margin + cell_dim, start_y = (y * cell_dim)
-								+ y_margin, stop_x = start_x, stop_y = start_y
-								+ cell_dim;
+						int start_x = (x * cellDim) + xMargin + cellDim, start_y = (y * cellDim)
+								+ yMargin, stop_x = start_x, stop_y = start_y
+								+ cellDim;
 
 						canvas.drawLine(start_x, invert(start_y), stop_x,
 								invert(stop_y), wall_paint);
 					}
 
 					if (tile.getWall(Tile.Direction.AHEAD)) {
-						int start_x = (x * cell_dim) + x_margin, start_y = (y * cell_dim)
-								+ y_margin + cell_dim, stop_x = start_x
-								+ cell_dim, stop_y = start_y;
+						int start_x = (x * cellDim) + xMargin, start_y = (y * cellDim)
+								+ yMargin + cellDim, stop_x = start_x
+								+ cellDim, stop_y = start_y;
 
 						canvas.drawLine(start_x, invert(start_y), stop_x,
 								invert(stop_y), wall_paint);
 					}
 
-					int px = (x * cell_dim) + x_margin, py = (y * cell_dim)
-							+ y_margin;
+					int px = (x * cellDim) + xMargin, py = (y * cellDim)
+							+ yMargin;
 
 					canvas.drawCircle(px, invert(py), strokeWidth / 2,
 							wall_paint);
 
-					px += cell_dim;
+					px += cellDim;
 
 					canvas.drawCircle(px, invert(py), strokeWidth / 2,
 							wall_paint);
 
-					px -= cell_dim;
-					py += cell_dim;
+					px -= cellDim;
+					py += cellDim;
 
 					canvas.drawCircle(px, invert(py), strokeWidth / 2,
 							wall_paint);
 
-					px += cell_dim;
+					px += cellDim;
 
 					canvas.drawCircle(px, invert(py), strokeWidth / 2,
 							wall_paint);
 				}
 			}
 
-			if (robot_z == z) {
+			if (zRobot == z) {
 				canvas.drawCircle(rob_x, invert(rob_y), rob_radius / 2,
 						wall_paint);
 				int radius = rob_radius / 2;
