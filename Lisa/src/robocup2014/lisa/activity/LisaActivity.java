@@ -3,6 +3,7 @@ package robocup2014.lisa.activity;
 import robocup2014.lisa.connection.ConnectedThread;
 import robocup2014.lisa.connection.Globals;
 import robocup2014.lisa.datatype.Robot;
+import robocup2014.lisa.datatype.Robot.Direction;
 import robocup2014.lisa.datatype.Tile;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -10,13 +11,13 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -77,9 +78,6 @@ public class LisaActivity extends Activity {
 		mazeView.setDisplaySize();
 		mazeView.setShowFirstFloor(true);
 		mazeView.update();
-		formatText("aaa1101000");
-		setTile(lastData);
-		Log.d("dir to go", lisa.getNextDir().toString());
 	}
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -151,9 +149,16 @@ public class LisaActivity extends Activity {
 				formatText((String) msg.obj);
 				if(dataReady){
 					setTile(lastData);
-					Log.d("dir to go", lisa.getNextDir().toString());
+					try
+					{
+					    lisa.getNextDir();
+					}
+					catch (Exception e)
+					{
+					    e.printStackTrace();
+					}
 				}
-				Log.d("handler", dataReady + " : " + lastData);
+				//Log.d("handler", lastData);
 				break;
 			}
 		}
@@ -180,11 +185,9 @@ public class LisaActivity extends Activity {
 
 	private void setTile(String data){
 
-		int x = data.charAt(0) - 'a',
-				y = data.charAt(1) - 'a';
-		boolean level = data.charAt(2) == 'a'? true : false;
+		boolean level = data.charAt(0) == '1'? true : false;
 		Tile.Floor floor;
-		switch(data.charAt(7)){
+		switch(data.charAt(5)){
 		case '1': floor = Tile.Floor.SILVER_FLOOR;
 		break;
 		case '2': floor = Tile.Floor.BLACK_FLOOR;
@@ -193,15 +196,14 @@ public class LisaActivity extends Activity {
 		break;
 		}
 		lisa.setLevel(level);
-		mazeView.setShowFirstFloor(level);
-		lisa.setPosition(new Point(x + lisa.startingPos, y + lisa.startingPos));
+		mazeView.setShowFirstFloor(!level);
 		lisa.setFloor(floor);
-		lisa.setVictim(data.charAt(8) == '1'? true : false);
+		lisa.setVictim(data.charAt(6) == '1'? true : false);
 		lisa.setObstacle();
-		lisa.setWalls(data.charAt(3) == '1'? true : false,
-				data.charAt(4) == '1'? true : false,
-						data.charAt(5) == '1'? true : false,
-								data.charAt(6) == '1'? true : false);
+		lisa.setWalls(data.charAt(1) == '1'? true : false,
+				data.charAt(2) == '1'? true : false,
+						data.charAt(3) == '1'? true : false,
+								data.charAt(4) == '1'? true : false);
 
 		mazeView.update();
 	}
@@ -240,7 +242,7 @@ public class LisaActivity extends Activity {
 
 			if(!mazeView.getShowFirstFloor() || followRobot) { return false; }
 
-			Log.d("Event", event.getAction() + event.toString());
+			//Log.d("Event", event.getAction() + event.toString());
 			switch(event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
 				mode = DRAG;
@@ -274,7 +276,7 @@ public class LisaActivity extends Activity {
 					float d2 = distance(startPoint[0], startPoint[1]);
 					float scale = d1 / d2;
 					mazeView.addScale(scale);
-					Log.d("Range", scale +"::"+ endPoint[0] +"::"+ endPoint[1] +"::"+ startPoint[0] +"::"+ startPoint[1]);
+					//Log.d("Range", scale +"::"+ endPoint[0] +"::"+ endPoint[1] +"::"+ startPoint[0] +"::"+ startPoint[1]);
 
 					midPoint[0] = midPoint[1];
 					startPoint[0] = endPoint[0];
@@ -373,8 +375,8 @@ public class LisaActivity extends Activity {
 				y_margin = (displaySize.y - (cell_dim * y_field_dim)) / 2;
 			}
 
-			Log.d("Drawing", x_field_dim+":"+y_field_dim+":"+x_margin+":"+y_margin+":"
-					+cell_dim+":"+displaySize.x+":"+displaySize.y);
+			//Log.d("Drawing", x_field_dim+":"+y_field_dim+":"+x_margin+":"+y_margin+":"
+			//		+cell_dim+":"+displaySize.x+":"+displaySize.y);
 
 
 			strokeWidth = cell_dim / 8;
@@ -409,27 +411,16 @@ public class LisaActivity extends Activity {
 			displaySize = p;
 		}
 
-		public void setScale(double s) {
-			scale = (float) s;
-
-			scale = limitValue(1, scale, 3);
-		}
-
 		public void addScale(double s) {
 			scale = (float) (scale * s);
 			//            if(showFirstFloor) {
-				//                scale = scaleFirstFloor;
-				//            }
+			//                scale = scaleFirstFloor;
+			//            }
 			scale = limitValue(1, scale, 3);
 		}
 
-		public void setCenter(Point newCenter) {
-			mazeCenter.x = newCenter.x;
-			mazeCenter.y = newCenter.y;
-		}
-
 		public void addDisplacement(Point d) {
-			Log.d("Displacement", d.toString());
+			//Log.d("Displacement", d.toString());
 			mazeCenter.x -= (d.x * 2) / scale;
 			mazeCenter.y -= (d.y * 2) / scale;
 			mazeCenter.x = limitValue(x_margin, mazeCenter.x, getWidth() - x_margin);
@@ -468,8 +459,8 @@ public class LisaActivity extends Activity {
 					rob_y = (lisa.getPosition().y * cell_dim) + y_margin + rob_radius;
 
 			if(followRobot) {
-				mazeCenter.x = rob_x;
-				mazeCenter.y = rob_y;
+				mazeCenter.x = getWidth() - rob_x;
+				mazeCenter.y = getHeight() - rob_y;
 			}
 
 			if(showFirstFloor) {
@@ -479,7 +470,7 @@ public class LisaActivity extends Activity {
 				canvas.scale(1, 1);
 			}
 
-			Log.d("Scaling", scale + ":" + mazeCenter.x + ":" + mazeCenter.y);
+			//Log.d("Scaling", scale + ":" + mazeCenter.x + ":" + mazeCenter.y);
 
 			for (int x = 0; x < x_field_dim; x++) {
 				for (int y = 0; y < y_field_dim; y++) {
@@ -589,6 +580,38 @@ public class LisaActivity extends Activity {
 			if (robot_z == z) {
 				canvas.drawCircle(rob_x, invert(rob_y), rob_radius / 2,
 						wall_paint);
+				int radius = rob_radius / 2;
+				Path triangle = new Path();
+				triangle.setFillType(Path.FillType.EVEN_ODD);
+				if(lisa.getDirection() == Direction.NORTH){
+					triangle.moveTo(rob_x - radius, invert(rob_y));
+					triangle.lineTo(rob_x, invert(rob_y) - radius);
+					triangle.lineTo(rob_x + radius, invert(rob_y));
+					triangle.lineTo(rob_x - radius, invert(rob_y));
+				}
+				if(lisa.getDirection() == Direction.EAST){
+					triangle.moveTo(rob_x, invert(rob_y) - radius);
+					triangle.lineTo(rob_x + radius, invert(rob_y));
+					triangle.lineTo(rob_x, invert(rob_y) + radius);
+					triangle.lineTo(rob_x, invert(rob_y) - radius);
+				}
+				if(lisa.getDirection() == Direction.SOUTH){
+					triangle.moveTo(rob_x + radius, invert(rob_y));
+					triangle.lineTo(rob_x, invert(rob_y) + radius);
+					triangle.lineTo(rob_x - radius, invert(rob_y));
+					triangle.lineTo(rob_x + radius, invert(rob_y));
+				}
+				if(lisa.getDirection() == Direction.WEST){
+					triangle.moveTo(rob_x, invert(rob_y) + radius);
+					triangle.lineTo(rob_x - radius, invert(rob_y));
+					triangle.lineTo(rob_x, invert(rob_y) - radius);
+					triangle.lineTo(rob_x, invert(rob_y) + radius);
+
+				}
+				triangle.close();
+				Paint direction_paint = new Paint();
+				direction_paint.setColor(Color.BLACK);
+				canvas.drawPath(triangle, direction_paint);
 			}
 		}
 

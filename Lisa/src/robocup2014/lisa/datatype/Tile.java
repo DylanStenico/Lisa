@@ -1,7 +1,5 @@
 package robocup2014.lisa.datatype;
 
-import java.util.Arrays;
-
 import android.graphics.Point;
 
 /**
@@ -10,16 +8,7 @@ import android.graphics.Point;
 public class Tile {
 
 	public enum Floor {
-		WHITE_FLOOR(0), SILVER_FLOOR(1), BLACK_FLOOR(2);
-		
-		private final int value;
-		 
-	    private Floor(int value){
-	        this.value = value;
-	    }
-	    private int toInt(){
-	    	return value;
-	    }
+		WHITE_FLOOR, SILVER_FLOOR, BLACK_FLOOR;
 	}
 
 	public enum Direction {
@@ -73,15 +62,12 @@ public class Tile {
 	}
 
 	public boolean isOpen(Direction dir) {
-		return !walls[dirToInt(dir)];
+		return !walls[dir.toInt()];
 	}
 
 	@Override
 	public String toString() {
-		return "Tile [floor=" + floor + ", victim=" + victim + ", walls="
-				+ Arrays.toString(walls) + ", visited=" + visited
-				+ ", obstacle=" + obstacle + ", priority=" + priority
-				+ ", position=" + position + "]\n";
+		return position.toString();
 	}
 
 	public boolean getVictim() {
@@ -95,29 +81,15 @@ public class Tile {
     public boolean getObstacle() { return obstacle; }
 
     public boolean getWall(Direction dir) {
-        return walls[dirToInt(dir)];
+        return walls[dir.toInt()];
     }
 
-	public void setWall(Direction dir, boolean value) {
-		walls[dirToInt(dir)] = value;
+	public void setWall(Robot.Direction dir, boolean value) {
+		walls[dir.toInt()] = value;
 	}
 
 	public void setFloor(Floor value) {
 		floor = value;
-	}
-
-	private int dirToInt(Direction dir) {
-		int i = 0;
-
-		if (dir == Direction.AHEAD)
-			i = 0;
-		else if (dir == Direction.RIGHT)
-			i = 1;
-		else if (dir == Direction.BACK)
-			i = 2;
-		else if (dir == Direction.LEFT)
-			i = 3;
-		return i;
 	}
 	public void setVictim(boolean isThere){
 		victim = isThere;

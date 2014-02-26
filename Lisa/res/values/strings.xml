@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Giraffa</string>
+    <string name="app_name">Forward</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_act__read">Act_Read</string>
     <string name="main_connect">Connect</string>
