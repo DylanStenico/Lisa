@@ -55,7 +55,7 @@ public class Robot
     public final int MAX_GROUND = 25,
 	    MAX_AIR = 7;
     // startingPosition of the robot.
-    public final int startingPos;
+    public final Point startingPos;
 
     // DATA
     // the two mazes and the pointer of the current maze
@@ -101,8 +101,8 @@ public class Robot
 	setEnclosure(mazeAir, MAX_AIR);
 
 	// set the current position to the center of the maze
-	startingPos = dimension / 2;
-	position = new Point(startingPos, startingPos);
+	startingPos = new Point(dimension / 2, dimension/2);
+	position = new Point(startingPos.x, startingPos.y);
 	direction = Direction.NORTH;
 	rampPoint = null;
 
@@ -134,7 +134,7 @@ public class Robot
 		{
 		    throw new Exception("exploration completed");
 		}
-	    } while (maze[end.x][end.y].isVisited());
+	    } while (maze[end.x][end.y].isVisited() && !maze[end.x][end.y].getPoint().equals(startingPos));
 
 	    // set all the priority in the maze
 	    dijkstra(start, end);
@@ -152,9 +152,6 @@ public class Robot
 		// crete a priorityqueue, that decides what tile is the best for
 		// the path
 		queue = new PriorityQueue<Tile>(1, comparator);
-		Log.d("laFigaGianluca start", start.toString());
-		Log.d("laFigaGianluca end", end.toString());
-
 		// add to the priority queue all the tile next to an open walls
 		if (maze[end.x][end.y].isOpen(Tile.Direction.AHEAD))
 		{
@@ -205,8 +202,8 @@ public class Robot
 	direction = relativeToReal(direction, dirToGo);
 	// update the robot position
 	setPosition(currentPoint);
-	printMaze();
 	Log.d("laFigaGianluca", toVisit.toString());
+	printMaze();
 	// return the relative direction the robot has to take
 	return dirToGo;
     }
@@ -376,17 +373,16 @@ public class Robot
 	    toVisitPoint = new Point(position.x, position.y - 1);
 	}
 	// check if the tile is already present in the toVisit stack
-	boolean alreadyPresent = false;
 	int i = 0;
-	while (i < toVisit.size() && !alreadyPresent)
+	while (i < toVisit.size())
 	{
-	    if (toVisit.get(i).equals(toVisitPoint))
+	    if (toVisit.get(i).equals(toVisitPoint) && !toVisitPoint.equals(startingPos))
 	    {
-		alreadyPresent = true;
+		toVisit.remove(i);
 	    }
 	    i++;
 	}
-	if (!alreadyPresent)
+	if (!toVisitPoint.equals(startingPos))
 	{
 	    toVisit.push(toVisitPoint);
 	}
